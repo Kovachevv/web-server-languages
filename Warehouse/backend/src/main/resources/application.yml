@@ -1,0 +1,14 @@
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:5432/warehouse_db
+    username: root
+    password: Password1!
+
+flyway:
+  enable: true
+  baseline-on-migrate: true
+  baseline-version: 1
+  driver-class-name: org.postgresql.Driver
+  url: jdbc:postgresql://localhost:5432/warehouse_db
+  username: root
+  password: Password1!
