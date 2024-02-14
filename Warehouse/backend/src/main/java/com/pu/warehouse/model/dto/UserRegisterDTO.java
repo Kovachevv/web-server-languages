@@ -11,14 +11,14 @@ public class UserRegisterDTO {
     private String username;
 
     @NotNull
-    @Pattern(regexp = "^(?=.*[a-z])(?=.*[A-Z])(?=.*[@\\-_`|]).{6,20}$\n", message = "Invalid password.")
+    @Pattern(regexp = "^(?=.*[a-z])(?=.*[A-Z])(?=.*[@\\-_`|]).{6,20}$", message = "Invalid password.")
     private String password;
 
     @NotNull
     @Email(message = "Invalid email.")
     private String email;
 
-    @Pattern(regexp = "^[0-9\\s-]+$\n", message = "Invalid phone number.")
+    @Pattern(regexp = "^[0-9\\s-]*$", message = "Invalid phone number.")
     private String phoneNumber;
 
     public String getUsername() {
