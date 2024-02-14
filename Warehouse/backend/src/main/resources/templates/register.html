@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Register</title>
+    <link rel="stylesheet" href="/css/register.css">
+</head>
+<body>
+
+<div class="container">
+    <h2 class="form-title">Registration Form</h2>
+    <form th:action="@{/register}" method="post" th:object="${user}" class="registration-form">
+        <div class="form-group">
+            <label for="username">Username:</label>
+            <input type="text" id="username" name="username" th:field="*{username}" required />
+            <div th:if="${#fields.hasErrors('username')}" th:errors="*{username}" class="error"></div>
+        </div>
+        <div class="form-group">
+            <label for="password">Password:</label>
+            <input type="password" id="password" name="password" th:field="*{password}" required autocomplete="new-password"/>
+            <div th:if="${#fields.hasErrors('password')}" th:errors="*{password}" class="error"></div>
+        </div>
+        <div class="form-group">
+            <label for="repeatPassword">Repeat Password:</label>
+            <input type="password" id="repeatPassword" name="repeatPassword" required />
+            <div id="passwordError" class="error"></div>
+        </div>
+        <div class="form-group">
+            <label for="email">E-mail:</label>
+            <input type="email" id="email" name="email" th:field="*{email}" required />
+            <div th:if="${#fields.hasErrors('email')}" th:errors="*{email}" class="error"></div>
+        </div>
+        <div class="form-group">
+            <label for="phone">Phone (optional):</label>
+            <input type="tel" id="phone" name="phone" th:field="*{phoneNumber}" />
+            <div th:if="${#fields.hasErrors('phoneNumber')}" th:errors="*{phoneNumber}" class="error"></div>
+        </div>
+        <div class="form-group">
+            <button type="submit">Register</button>
+        </div>
+    </form>
+</div>
+
+<script>
+    document.querySelector('.registration-form').addEventListener('submit', function (e) {
+        var password = document.getElementById('password').value;
+        var repeatPassword = document.getElementById('repeatPassword').value;
+        if (password !== repeatPassword) {
+            document.getElementById('passwordError').textContent = 'Passwords do not match!';
+            e.preventDefault();
+        }
+    });
+</script>
+
+</body>
+</html>

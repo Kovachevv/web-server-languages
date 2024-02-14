@@ -1,18 +1,12 @@
 package com.pu.warehouse.model.entity;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.JoinTable;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.Table;
-import jakarta.validation.constraints.NotNull;
+import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import java.math.BigDecimal;
 
 @Entity
 @Table(name = "products")
 public class Product extends BaseEntity{
-
 
     @NotNull
     @Column(name = "name")
@@ -30,11 +24,11 @@ public class Product extends BaseEntity{
 
     @NotNull
     @Column(name = "buy_price")
-    private BigDecimal buyPrice;
+    private BigDecimal purchasePrice;
 
     @NotNull
     @Column(name = "sell_price")
-    private BigDecimal sellPrice;
+    private BigDecimal sellingPrice;
 
     @NotNull
     @Column(name = "quantity")
@@ -62,21 +56,21 @@ public class Product extends BaseEntity{
         return this;
     }
 
-    public BigDecimal getBuyPrice() {
-        return buyPrice;
+    public BigDecimal getPurchasePrice() {
+        return purchasePrice;
     }
 
-    public Product setBuyPrice(BigDecimal buyPrice) {
-        this.buyPrice = buyPrice;
+    public Product setPurchasePrice(BigDecimal buyPrice) {
+        this.purchasePrice = buyPrice;
         return this;
     }
 
-    public BigDecimal getSellPrice() {
-        return sellPrice;
+    public BigDecimal getSellingPrice() {
+        return sellingPrice;
     }
 
-    public Product setSellPrice(BigDecimal sellPrice) {
-        this.sellPrice = sellPrice;
+    public Product setSellingPrice(BigDecimal sellPrice) {
+        this.sellingPrice = sellPrice;
         return this;
     }
 

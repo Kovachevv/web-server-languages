@@ -1,75 +1,90 @@
 package com.pu.warehouse.controller;
 
-import com.pu.warehouse.model.dto.ProductCreateDTO;
 import com.pu.warehouse.model.dto.ProductDTO;
-import com.pu.warehouse.model.dto.ProductUpdateDTO;
+import com.pu.warehouse.model.dto.ProductEditDTO;
+import com.pu.warehouse.model.entity.Product;
 import com.pu.warehouse.service.ProductService;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.List;
 
-@RestController
-@RequestMapping("api/v1")
+@Controller
 public class ProductController {
 
     private final ProductService productService;
 
-    public ProductController(ProductService productService) {
-        this.productService = productService;
-    }
-//
-//    @GetMapping("/products")
-//    public ResponseEntity<List<ProductDTO>> getAllProducts(){
-//        Page<Product> products = productService.getAll();
-//
-//    }
-
-    @DeleteMapping("/products/{productId}")
-    public ResponseEntity<Void> deleteProduct(@PathVariable Long productId) {
-
-        productService.deleteProduct(productId);
-
-        return ResponseEntity.ok().build();
+    public ProductController(ProductService inventoryService) {
+        this.productService = inventoryService;
     }
 
-    @GetMapping("/products/{categoryId}")
-    public ResponseEntity<List<ProductDTO>> search(@PathVariable Long categoryId,
-                                                   @RequestParam String searchTerm,
-                                                   @RequestParam(required = false, defaultValue = "1") int pageNumber,
-                                                   @RequestParam(required = false, defaultValue = "8") int pageSize){
+    @GetMapping("/inventory")
+    public String viewInventoryPage(@RequestParam(required = false) String searchTerm,
+                                    @RequestParam(required = false) String category,
+                                    @RequestParam(required = false) Integer code,
+                                    @RequestParam(defaultValue = "0") int page,
+                                    @RequestParam(defaultValue = "10") int size,
+                                    Model model) {
 
-        List<ProductDTO> products = productService.searchProduct(categoryId, searchTerm, pageNumber, pageSize);
+        Pageable pageable = PageRequest.of(page, size);
 
-        return ResponseEntity.ok(products);
+        Page<Product> pageResult;
+        if ((searchTerm != null && !searchTerm.isEmpty()) ||
+                (category != null && !category.equals("All")) ||
+                (code != null)) {
+            pageResult = productService.searchProducts(searchTerm, category, code, pageable);
+        } else {
+            pageResult = productService.getAllProducts(pageable);
+        }
+
+        model.addAttribute("page", pageResult);
+        model.addAttribute("searchTerm", searchTerm);
+        model.addAttribute("category", category);
+        model.addAttribute("code", code);
+        return "inventory";
     }
 
-    @PutMapping("/products/{productId}")
-    public ResponseEntity<Void> updateProduct(@PathVariable long productId,
-                                              @RequestBody ProductUpdateDTO productUpdateDTO){
-
-
-        productService.updateProduct(productUpdateDTO, productId);
-
-        return ResponseEntity.ok().build();
+    @GetMapping("/add-product")
+    public String addProductForm(Model model) {
+        model.addAttribute("product", new Product());
+        return "product-add";
     }
 
-    public ResponseEntity<Void> createProduct(@RequestBody ProductCreateDTO productCreateDTO){
-
-
-        productService.createProduct(productCreateDTO);
-
-        return ResponseEntity.ok().build();
-
+    @GetMapping("/edit-product/{id}")
+    public String editProductForm(@PathVariable Long id, Model model) {
+        model.addAttribute("product", productService.getProductById(id));
+        return "edit-product";
     }
 
 
+    @PostMapping("/add-product")
+    public String saveProduct(@ModelAttribute ProductDTO product, BindingResult result, RedirectAttributes redirectAttributes) {
+      try {
+          productService.saveProduct(product);
+          return "redirect:/inventory";
+      }catch (IllegalArgumentException e){
+          redirectAttributes.addFlashAttribute("errorMessage", "Product code must be unique.");
+          return "redirect:/add-product";
+      }
+    }
 
+    @PostMapping("/edit-product/{id}")
+    public String updateProduct(@PathVariable Long id,
+                                @ModelAttribute ProductEditDTO productDTO){
+
+        productService.updateProduct(id, productDTO);
+        return "redirect:/inventory";
+    }
+
+    @GetMapping("/delete-product/{id}")
+    public String deleteProduct(@PathVariable Long id) {
+        productService.deleteProduct(id);
+        return "redirect:/";
+    }
 }

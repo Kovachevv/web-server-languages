@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Edit Product</title>
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+
+<div class="container">
+    <h2 class="form-title">Edit Product</h2>
+    <form th:action="@{/edit-product/{id}(id=${product.id})}" th:object="${product}" method="post" enctype="multipart/form-data">
+        <input type="hidden" th:field="*{id}" />
+
+        <div class="form-group">
+            <label for="name">Product Name:</label>
+            <input type="text" id="name" th:field="*{name}" required maxlength="50" class="form-control"/>
+        </div>
+
+        <div class="form-group">
+            <label for="description">Product Description:</label>
+            <textarea id="description" th:field="*{description}" maxlength="2000" class="form-control"></textarea>
+        </div>
+        <div class="form-group">
+            <label for="purchasePrice">Purchase Price:</label>
+            <input type="number" id="purchasePrice" th:field="*{purchasePrice}" required min="0" step="any" class="form-control"/>
+        </div>
+        <div class="form-group">
+            <label for="sellingPrice">Selling Price:</label>
+            <input type="number" id="sellingPrice" th:field="*{sellingPrice}" required min="0" step="any" class="form-control"/>
+        </div>
+
+        <div class="form-group">
+            <label for="quantity">Number of Products:</label>
+            <input type="number" id="quantity" th:field="*{quantity}" required min="0" class="form-control"/>
+        </div>
+        <div class="form-group">
+            <label for="code">Code:</label>
+            <input type="text" id="code" th:field="*{code}" required class="form-control"/>
+        </div>
+
+        <div class="form-group">
+            <button type="submit" class="btn">Save Changes</button>
+        </div>
+    </form>
+</div>
+
+</body>
+</html>

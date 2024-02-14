@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Inventory</title>
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+<h2>Inventory</h2>
+
+<form th:action="@{/inventory}" method="get">
+    <input type="text" name="searchTerm" th:value="${searchTerm}" placeholder="Search..." />
+    <select name="category">
+        <option value="All" th:selected="${category == null || category.equals('All')}">All</option>
+        <option value="Groceries" th:selected="${category == 'Groceries'}">Groceries</option>
+        <option value="Office Supplies" th:selected="${category == 'Office Supplies'}">Office Supplies</option>
+        <option value="Building Materials" th:selected="${category == 'Building Materials'}">Building Materials</option>
+    </select>
+    <input type="text" name="code" th:value="${code}" placeholder="Code" />
+    <button type="submit">Search</button>
+</form>
+
+<div class="button-container">
+    <a href="/add-product"><button>Add New Product</button></a>
+</div>
+
+<table border="1">
+    <thead>
+    <tr>
+        <th>Product Name</th>
+        <th>Description</th>
+        <th>Category</th>
+        <th>Code</th>
+        <th>Purchase Price</th>
+        <th>Selling Price</th>
+        <th>Number of Products</th>
+        <th>Actions</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="product : ${page.content}">
+        <td th:text="${product.name}"></td>
+        <td th:text="${product.description}"></td>
+        <td th:text="${product.category.name}"></td>
+        <td th:text="${product.code}"></td>
+        <td th:text="${product.purchasePrice}"></td>
+        <td th:text="${product.sellingPrice}"></td>
+        <td th:text="${product.quantity}"></td>
+        <td>
+            <a th:href="@{/edit-product/{id}(id=${product.id})}">Edit</a>
+            <a th:href="@{/delete-product/{id}(id=${product.id})}">Delete</a>
+        </td>
+    </tr>
+    <tr th:if="${page.empty}">
+        <td colspan="8">No products found</td>
+    </tr>
+    </tbody>
+</table>
+
+<div>
+    <ul class="pagination">
+        <li class="page-item" th:classappend="${page.first} ? 'disabled' : ''">
+            <a th:href="@{/inventory(page=${page.number - 1})}" class="page-link" th:attr="aria-disabled=${page.first} ? 'true' : null, tabindex=${page.first} ? '-1' : null">Previous</a>
+        </li>
+        <li th:each="pageNum : ${#numbers.sequence(1, page.totalPages)}" class="page-item" th:classappend="${pageNum == page.number + 1} ? 'active' : ''">
+            <a th:href="@{/inventory(page=${pageNum - 1})}" class="page-link" th:text="${pageNum}"></a>
+        </li>
+        <li class="page-item" th:classappend="${page.last} ? 'disabled' : ''">
+            <a th:href="@{/inventory(page=${page.number + 1})}" class="page-link" th:attr="aria-disabled=${page.last} ? 'true' : null, tabindex=${page.last} ? '-1' : null">Next</a>
+        </li>
+    </ul>
+</div>
+
+</body>
+</html>

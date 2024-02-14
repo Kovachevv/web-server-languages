@@ -3,84 +3,68 @@ package com.pu.warehouse.model.dto;
 
 import java.math.BigDecimal;
 
-public class ProductDTO {
+public class ProductEditDTO {
     private String name;
-    private long category;
     private String description;
     private BigDecimal purchasePrice;
     private BigDecimal sellingPrice;
     private int quantity;
     private int code;
 
-    public ProductDTO(String name, long category, String description, BigDecimal purchasePrice, BigDecimal sellingPrice, int quantity, int code) {
+    public ProductEditDTO(String name, String description, BigDecimal purchasePrice, BigDecimal sellingPrice, int quantity, int code) {
         this.name = name;
-        this.category = category;
         this.description = description;
         this.purchasePrice = purchasePrice;
         this.sellingPrice = sellingPrice;
         this.quantity = quantity;
         this.code = code;
     }
+
     public String getName() {
         return name;
     }
 
-    public ProductDTO setName(String name) {
+    public void setName(String name) {
         this.name = name;
-        return this;
-    }
-
-    public long getCategory() {
-        return category;
-    }
-
-    public ProductDTO setCategory(long category) {
-        this.category = category;
-        return this;
     }
 
     public String getDescription() {
         return description;
     }
 
-    public ProductDTO setDescription(String description) {
+    public void setDescription(String description) {
         this.description = description;
-        return this;
     }
 
     public BigDecimal getPurchasePrice() {
         return purchasePrice;
     }
 
-    public ProductDTO setPurchasePrice(BigDecimal purchasePrice) {
+    public void setPurchasePrice(BigDecimal purchasePrice) {
         this.purchasePrice = purchasePrice;
-        return this;
     }
 
     public BigDecimal getSellingPrice() {
         return sellingPrice;
     }
 
-    public ProductDTO setSellingPrice(BigDecimal sellingPrice) {
+    public void setSellingPrice(BigDecimal sellingPrice) {
         this.sellingPrice = sellingPrice;
-        return this;
     }
 
     public int getQuantity() {
         return quantity;
     }
 
-    public ProductDTO setQuantity(int quantity) {
+    public void setQuantity(int quantity) {
         this.quantity = quantity;
-        return this;
     }
 
     public int getCode() {
         return code;
     }
 
-    public ProductDTO setCode(int code) {
+    public void setCode(int code) {
         this.code = code;
-        return this;
     }
 }

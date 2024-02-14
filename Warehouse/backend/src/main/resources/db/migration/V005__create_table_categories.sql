@@ -5,7 +5,7 @@ CREATE TABLE IF NOT EXISTS categories (
 );
 
 INSERT INTO categories("name")
-VALUES ('GROCERY'),
-       ('STATIONARY'),
+VALUES ('GROCERIES'),
+       ('OFFICE_SUPPLIES'),
        ('BUILDING_MATERIAL');
 

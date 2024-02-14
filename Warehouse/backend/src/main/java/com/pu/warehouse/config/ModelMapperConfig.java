@@ -14,12 +14,8 @@ public class ModelMapperConfig {
         final ModelMapper modelMapper = new ModelMapper();
 
         modelMapper.typeMap(Product.class, ProductDTO.class)
-                .addMapping(Product::getId, ProductDTO::setId)
-//                .addMapping(source -> source.getCategory().getName().name(), ProductDTO::setCategory)
                 .addMapping(Product::getName, ProductDTO::setName)
                 .addMapping(Product::getDescription, ProductDTO::setDescription)
-//                .addMapping(source -> source.getBuyPrice().doubleValue(), ProductDTO::setBuyPrice)
-//                .addMapping(source -> source.getSellPrice().doubleValue(), ProductDTO::setSellPrice)
                 .addMapping(Product::getQuantity, ProductDTO::setQuantity)
                 .addMapping(Product::getCode, ProductDTO::setCode);
 
