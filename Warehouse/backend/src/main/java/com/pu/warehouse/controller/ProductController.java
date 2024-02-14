@@ -2,6 +2,7 @@ package com.pu.warehouse.controller;
 
 import com.pu.warehouse.model.dto.ProductDTO;
 import com.pu.warehouse.model.dto.ProductEditDTO;
+import com.pu.warehouse.model.dto.ProductViewDTO;
 import com.pu.warehouse.model.entity.Product;
 import com.pu.warehouse.service.ProductService;
 import org.springframework.data.domain.Page;
@@ -43,7 +44,10 @@ public class ProductController {
             pageResult = productService.getAllProducts(pageable);
         }
 
-        model.addAttribute("page", pageResult);
+
+        Page<ProductViewDTO> result = convertToProductViewDTOPage(pageResult);
+
+        model.addAttribute("page", result);
         model.addAttribute("searchTerm", searchTerm);
         model.addAttribute("category", category);
         model.addAttribute("code", code);
@@ -86,5 +90,22 @@ public class ProductController {
     public String deleteProduct(@PathVariable Long id) {
         productService.deleteProduct(id);
         return "redirect:/";
+    }
+
+    public Page<ProductViewDTO> convertToProductViewDTOPage(Page<Product> productsPage) {
+        return productsPage.map(this::convertToProductViewDTO);
+    }
+
+    private ProductViewDTO convertToProductViewDTO(Product product) {
+        ProductViewDTO dto = new ProductViewDTO();
+        dto.setId(product.getId());
+        dto.setName(product.getName());
+        dto.setCode(product.getCode());
+        dto.setDescription(product.getDescription());
+        dto.setQuantity(product.getQuantity());
+        dto.setPurchasePrice(product.getPurchasePrice());
+        dto.setSellingPrice(product.getSellingPrice());
+        dto.setCategory(product.getCategory().getName().getName());
+        return dto;
     }
 }
